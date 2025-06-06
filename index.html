@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Management & Boundary Setting Toolkit</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .main-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            overflow: hidden;
+            margin: 20px auto;
+            max-width: 1200px;
+        }
+        
+        .header-gradient {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        .capacity-bar {
+            height: 35px;
+            background: #e9ecef;
+            border-radius: 20px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+        
+        .capacity-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #28a745, #ffc107, #dc3545);
+            border-radius: 20px;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .task-item {
+            background: white;
+            border-left: 5px solid #4facfe;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        
+        .task-item.medium { border-left-color: #ffc107; }
+        .task-item.high { border-left-color: #dc3545; }
+        
+        .phrase-card {
+            background: white;
+            border-left: 5px solid #4facfe;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 15px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        
+        .phrase-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        }
+        
+        .decision-option {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .decision-option:hover {
+            border-color: #4facfe;
+            background: #f0f8ff;
+        }
+        
+        .decision-option.selected {
+            background: #4facfe;
+            color: white;
+            border-color: #4facfe;
+        }
+        
+        .magic-ball {
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #4a4a4a, #000);
+            margin: 30px auto;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .magic-ball:hover { transform: scale(1.05); }
+        .magic-ball.shake { animation: shake 0.6s ease-in-out; }
+        
+        @keyframes shake {
+            0%, 20%, 40%, 60%, 80%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-15px); }
+        }
+        
+        .ball-surface {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: #1a1a1a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .ball-window {
+            width: 90px;
+            height: 90px;
+            background: #000080;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid #333;
+        }
+        
+        .ball-answer {
+            color: white;
+            font-size: 11px;
+            text-align: center;
+            padding: 8px;
+            font-weight: bold;
+        }
+        
+        .roulette-wheel {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            margin: 30px auto;
+            position: relative;
+            border: 6px solid #333;
+            overflow: hidden;
+        }
+        
+        .wheel-sections {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            position: relative;
+            transition: transform 3s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        
+        .wheel-section {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            transform-origin: 100% 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            text-align: center;
+            padding: 15px;
+            box-sizing: border-box;
+            color: white;
+        }
+        
+        .btn-gradient {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            border: none;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .btn-gradient:hover {
+            background: linear-gradient(135deg, #00f2fe, #4facfe);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="main-container">
+            <div class="header-gradient">
+                <h1><i class="fas fa-bullseye"></i> Time Management Toolkit</h1>
+                <p>Master your workload and learn to say no with confidence</p>
+            </div>
+            
+            <ul class="nav nav-tabs" id="mainTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="capacity-tab" data-bs-toggle="tab" data-bs-target="#capacity" type="button" role="tab">
+                        <i class="fas fa-chart-bar"></i> Capacity
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="saying-no-tab" data-bs-toggle="tab" data-bs-target="#saying-no" type="button" role="tab">
+                        <i class="fas fa-shield-alt"></i> Saying No
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="time-blocking-tab" data-bs-toggle="tab" data-bs-target="#time-blocking" type="button" role="tab">
+                        <i class="fas fa-calendar-alt"></i> Time Blocking
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="decision-magic-tab" data-bs-toggle="tab" data-bs-target="#decision-magic" type="button" role="tab">
+                        <i class="fas fa-magic"></i> Decision Magic
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="emergency-tab" data-bs-toggle="tab" data-bs-target="#emergency" type="button" role="tab">
+                        <i class="fas fa-exclamation-triangle"></i> Emergency
+                    </button>
+                </li>
+            </ul>
+            
+            <div class="tab-content p-4" id="mainTabContent">
+                <!-- Capacity Management Tab -->
+                <div class="tab-pane fade show active" id="capacity" role="tabpanel">
+                    <h2><i class="fas fa-chart-bar text-primary"></i> Workload Capacity Manager</h2>
+                    <p class="lead">Track what's on your plate and visualize when you're at your limit.</p>
+                    
+                    <div class="bg-light rounded p-4 mb-4">
+                        <h4><i class="fas fa-battery-three-quarters text-success"></i> Current Capacity</h4>
+                        <div class="capacity-bar">
+                            <div class="capacity-fill" id="capacityFill" style="width: 0%">0%</div>
+                        </div>
+                        <p id="capacityStatus" class="mb-0"><i class="fas fa-check-circle text-success"></i> You're in the green zone! 💚</p>
+                    </div>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-5">
+                            <input type="text" class="form-control form-control-lg" id="taskInput" placeholder="What task or commitment do you need to add?">
+                        </div>
+                        <div class="col-md-3">
+                            <select class="form-select form-select-lg" id="effortLevel">
+                                <option value="10">Small (10%)</option>
+                                <option value="25" selected>Medium (25%)</option>
+                                <option value="40">Large (40%)</option>
+                                <option value="60">Huge (60%)</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn btn-gradient btn-lg w-100" onclick="addTask()">
+                                <i class="fas fa-plus"></i> Add
+                            </button>
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn btn-outline-primary btn-lg w-100" onclick="saveData()">
+                                <i class="fas fa-download"></i> Save
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="taskList"></div>
+                    
+                    <div class="alert alert-warning">
+                        <h5><i class="fas fa-lightbulb"></i> Capacity Tips</h5>
+                        <ul class="mb-0">
+                            <li><strong>Green (0-70%):</strong> You have room for new commitments</li>
+                            <li><strong>Yellow (71-90%):</strong> Proceed with caution - you're getting full</li>
+                            <li><strong>Red (91%+):</strong> STOP! Time to say no or delegate</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Saying No Tab -->
+                <div class="tab-pane fade" id="saying-no" role="tabpanel">
+                    <h2><i class="fas fa-shield-alt text-primary"></i> The Art of Saying No</h2>
+                    <p class="lead">Ready-to-use phrases and a decision tree to help you decline gracefully.</p>
+                    
+                    <div class="bg-light rounded p-4 mb-4">
+                        <h4><i class="fas fa-question-circle"></i> Should I Say Yes? Decision Tree</h4>
+                        <div class="mb-3">
+                            <strong>Does this align with my top 3 priorities?</strong>
+                        </div>
+                        <div class="decision-option" onclick="showResult('priority-yes')">
+                            <i class="fas fa-check text-success"></i> Yes, it directly supports my goals
+                        </div>
+                        <div class="decision-option" onclick="showResult('priority-no')">
+                            <i class="fas fa-times text-danger"></i> No, it's not related to my priorities
+                        </div>
+                        <div class="decision-option" onclick="showResult('priority-maybe')">
+                            <i class="fas fa-question text-warning"></i> I'm not sure
+                        </div>
+                        
+                        <div id="priority-no" class="alert alert-danger mt-3" style="display: none;">
+                            <strong><i class="fas fa-ban"></i> Say No!</strong> If it doesn't align with your priorities, it's taking time away from what matters most.
+                        </div>
+                        
+                        <div id="priority-maybe" class="alert alert-warning mt-3" style="display: none;">
+                            <strong><i class="fas fa-pause"></i> Pause and clarify your priorities first.</strong> Take time to define your top 3 goals before committing.
+                        </div>
+                        
+                        <div id="priority-yes" class="alert alert-success mt-3" style="display: none;">
+                            <div class="mb-3">
+                                <strong>Do I have the capacity right now?</strong>
+                            </div>
+                            <div class="decision-option" onclick="showResult('capacity-yes')">
+                                <i class="fas fa-check text-success"></i> Yes, I'm under 70% capacity
+                            </div>
+                            <div class="decision-option" onclick="showResult('capacity-no')">
+                                <i class="fas fa-times text-danger"></i> No, I'm already overloaded
+                            </div>
+                        </div>
+                        
+                        <div id="capacity-yes" class="alert alert-success mt-3" style="display: none;">
+                            <strong><i class="fas fa-thumbs-up"></i> You can consider saying yes!</strong> But set clear boundaries and timelines.
+                        </div>
+                        
+                        <div id="capacity-no" class="alert alert-danger mt-3" style="display: none;">
+                            <strong><i class="fas fa-ban"></i> Say No or Negotiate!</strong> Offer alternatives: "I can't do this now, but I could help in [timeframe] or [different way]."
+                        </div>
+                    </div>
+                    
+                    <h4><i class="fas fa-comments"></i> Ready-to-Use "No" Phrases</h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="phrase-card" onclick="copyPhrase(this)">
+                                <h5><i class="fas fa-clock"></i> The Time Boundary</h5>
+                                <p>"I wish I could help, but I'm at capacity right now. Could we revisit this in [timeframe]?"</p>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="phrase-card" onclick="copyPhrase(this)">
+                                <h5><i class="fas fa-bullseye"></i> The Priority Redirect</h5>
+                                <p>"This sounds great, but it doesn't align with my current priorities. I need to focus on [your priority] right now."</p>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="phrase-card" onclick="copyPhrase(this)">
+                                <h5><i class="fas fa-handshake"></i> The Helpful Alternative</h5>
+                                <p>"I can't take this on, but have you considered [alternative solution/person who might help]?"</p>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="phrase-card" onclick="copyPhrase(this)">
+                                <h5><i class="fas fa-calendar-plus"></i> The Future Opening</h5>
+                                <p>"My plate is full until [date]. If this is still relevant then, I'd be happy to discuss it."</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Time Blocking Tab -->
+                <div class="tab-pane fade" id="time-blocking" role="tabpanel">
+                    <h2><i class="fas fa-calendar-alt text-primary"></i> Time Blocking Health Check</h2>
+                    <p class="lead">Evaluate how well your current Apple Calendar time blocking system is working.</p>
+                    
+                    <div class="bg-light rounded p-4 mb-4">
+                        <h4><i class="fas fa-search"></i> Quick System Audit</h4>
+                        <p>Answer these questions to see how your time blocking stacks up:</p>
+                        
+                        <div class="mb-4">
+                            <strong>1. How specific are your time blocks?</strong>
+                            <div class="decision-option" onclick="scorePoint(1, 0)">
+                                <i class="fas fa-times text-danger"></i> Generic blocks like "Work" or "Meetings"
+                            </div>
+                            <div class="decision-option" onclick="scorePoint(1, 1)">
+                                <i class="fas fa-exclamation-triangle text-warning"></i> Mix of specific and generic blocks
+                            </div>
+                            <div class="decision-option" onclick="scorePoint(1, 2)">
+                                <i class="fas fa-check text-success"></i> Specific blocks like "Email responses" or "Project X review"
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <strong>2. Do you have buffer time between different types of work?</strong>
+                            <div class="decision-option" onclick="scorePoint(2, 0)">
+                                <i class="fas fa-times text-danger"></i> Back-to-back scheduling, no breaks
+                            </div>
+                            <div class="decision-option" onclick="scorePoint(2, 1)">
+                                <i class="fas fa-exclamation-triangle text-warning"></i> Some buffer time, but often run over
+                            </div>
+                            <div class="decision-option" onclick="scorePoint(2, 2)">
+                                <i class="fas fa-check text-success"></i> 10-15 minute buffers between different task types
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <strong>3. Do you batch similar tasks together?</strong>
+                            <div class="decision-option" onclick="scorePoint(3, 0)">
+                                <i class="fas fa-times text-danger"></i> Tasks scattered throughout the day
+                            </div>
+                            <div class="decision-option" onclick="scorePoint(3, 1)">
+                                <i class="fas fa-exclamation-triangle text-warning"></i> Sometimes group similar tasks
+                            </div>
+                            <div class="decision-option" onclick="scorePoint(3, 2)">
+                                <i class="fas fa-check text-success"></i> Dedicated blocks for emails, calls, deep work, etc.
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <strong>4. How well do you protect your blocked time?</strong>
+                            <div class="decision-option" onclick="scorePoint(4, 0)">
+                                <i class="fas fa-times text-danger"></i> Others often schedule over my planned work
+                            </div>
+                            <div class="decision-option" onclick="scorePoint(4, 1)">
+                                <i class="fas fa-exclamation-triangle text-warning"></i> Sometimes get interrupted but try to reschedule
+                            </div>
+                            <div class="decision-option" onclick="scorePoint(4, 2)">
+                                <i class="fas fa-check text-success"></i> Treat time blocks as unmovable appointments
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <strong>5. How realistic are your time estimates?</strong>
+                            <div class="decision-option" onclick="scorePoint(5, 0)">
+                                <i class="fas fa-times text-danger"></i> Consistently run over my blocked times
+                            </div>
+                            <div class="decision-option" onclick="scorePoint(5, 1)">
+                                <i class="fas fa-exclamation-triangle text-warning"></i> Sometimes accurate, sometimes not
+                            </div>
+                            <div class="decision-option" onclick="scorePoint(5, 2)">
+                                <i class="fas fa-check text-success"></i> Usually finish within my blocked time
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn-outline-primary" onclick="saveTimeBlockingData()">
+                            <i class="fas fa-download"></i> Save Assessment
+                        </button>
+                    </div>
+                    
+                    <div id="blocking-score" class="alert" style="display: none;">
+                        <h5 id="score-title">Your Time Blocking Score</h5>
+                        <div id="score-content"></div>
+                    </div>
+                    
+                    <h4><i class="fab fa-apple"></i> Apple Calendar Tips</h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="phrase-card">
+                                <h5><i class="fas fa-redo"></i> Use Repeating Events</h5>
+                                <p>Set up recurring blocks for routine activities using the Repeat feature to save time.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="phrase-card">
+                                <h5><i class="fas fa-palette"></i> Color Coding</h5>
+                                <p>Create different calendars for different work types and assign colors.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Decision Magic Tab -->
+                <div class="tab-pane fade" id="decision-magic" role="tabpanel">
+                    <h2><i class="fas fa-magic text-primary"></i> Decision Magic</h2>
+                    <p class="lead">When you're stuck choosing between tasks, let these fun tools help!</p>
+                    
+                    <div class="row">
+                        <!-- Magic 8-Ball -->
+                        <div class="col-lg-6">
+                            <div class="bg-light rounded p-4 text-center">
+                                <h4><i class="fas fa-circle text-dark"></i> Magic 8-Ball</h4>
+                                <input type="text" class="form-control mb-3" id="magicQuestion" placeholder="Should I work on the report or answer emails first?">
+                                
+                                <div id="magicBall" class="magic-ball" onclick="shakeBall()">
+                                    <div class="ball-surface">
+                                        <div class="ball-window">
+                                            <div id="ballAnswer" class="ball-answer">Ask a question...</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <button class="btn btn-gradient" onclick="shakeBall()">
+                                    <i class="fas fa-dice"></i> Shake the Ball!
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Task Roulette -->
+                        <div class="col-lg-6">
+                            <div class="bg-light rounded p-4 text-center">
+                                <h4><i class="fas fa-bullseye"></i> Task Roulette</h4>
+                                <div class="row mb-3">
+                                    <div class="col-8">
+                                        <input type="text" class="form-control" id="rouletteTask" placeholder="Enter a task...">
+                                    </div>
+                                    <div class="col-4">
+                                        <button class="btn btn-gradient w-100" onclick="addRouletteTask()">Add</button>
+                                    </div>
+                                </div>
+                                
+                                <div id="rouletteTasks" class="mb-3" style="min-height: 60px;">
+                                    <div class="alert alert-warning">Add 2-5 tasks to spin!</div>
+                                </div>
+                                
+                                <div id="rouletteWheel" class="roulette-wheel" style="display: none;">
+                                    <div style="position: absolute; top: -20px; left: 50%; transform: translateX(-50%); font-size: 30px; z-index: 10;">👆</div>
+                                    <div id="wheelSections" class="wheel-sections"></div>
+                                </div>
+                                
+                                <button id="spinButton" class="btn btn-gradient" onclick="spinWheel()" style="display: none;">
+                                    <i class="fas fa-sync-alt"></i> Spin!
+                                </button>
+                                
+                                <div id="rouletteResult" class="alert alert-success mt-3" style="display: none;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Quick Tools -->
+                    <div class="mt-4">
+                        <h4><i class="fas fa-bolt"></i> Quick Decision Tools</h4>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="phrase-card" onclick="coinFlip()">
+                                    <h5><i class="fas fa-coins"></i> Coin Flip</h5>
+                                    <p id="coinResult">Click for yes/no decisions!</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="phrase-card" onclick="rollDice()">
+                                    <h5><i class="fas fa-dice"></i> Dice Roll</h5>
+                                    <p id="diceResult">Roll 1-6 for options!</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="phrase-card" onclick="getMantra()">
+                                    <h5><i class="fas fa-om"></i> Focus Mantra</h5>
+                                    <p id="mantraResult">Get motivated!</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="text-end">
+                            <button class="btn btn-outline-primary" onclick="saveDecisionData()">
+                                <i class="fas fa-download"></i> Save Decision Results
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Emergency Tab -->
+                <div class="tab-pane fade" id="emergency" role="tabpanel">
+                    <div class="bg-danger text-white rounded p-4 text-center mb-4">
+                        <h3><i class="fas fa-exclamation-triangle"></i> Emergency Brake Protocol</h3>
+                        <p>When you're overwhelmed and need immediate relief</p>
+                        
+                        <p>How stressed are you right now?</p>
+                        <div class="d-flex flex-wrap justify-content-center gap-2">
+                            <button class="btn btn-outline-light" onclick="setStress(1)">😌 Fine</button>
+                            <button class="btn btn-outline-light" onclick="setStress(2)">😰 Stressed</button>
+                            <button class="btn btn-outline-light" onclick="setStress(3)">😵 Overwhelmed</button>
+                            <button class="btn btn-outline-light" onclick="setStress(4)">🤯 Burning Out</button>
+                        </div>
+                    </div>
+                    
+                    <div id="stress-response"></div>
+                    
+                    <div class="alert alert-warning">
+                        <h5><i class="fas fa-search"></i> Quick Commitment Audit</h5>
+                        <ol>
+                            <li><strong>Must Do:</strong> What happens if I don't do this?</li>
+                            <li><strong>Should Do:</strong> What can I delegate or postpone?</li>
+                            <li><strong>Could Do:</strong> What can I drop completely?</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="text-end">
+                        <button class="btn btn-outline-primary" onclick="saveEmergencyData()">
+                            <i class="fas fa-download"></i> Save Emergency Plan
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // ========================================
+        // GLOBAL VARIABLES - MUST BE DECLARED FIRST!
+        // ========================================
+        let currentCapacity = 0;
+        let tasks = [];
+        let blockingScore = 0;
+        let blockingAnswers = {};
+        let rouletteTasks = [];
+        let stressLevel = 0;
+
+        // Magic 8-Ball responses
+        const magicResponses = [
+            "✅ Definitely start with that!", "🎯 Focus on it now", "⏰ Perfect timing for this task",
+            "🚀 Go for it immediately", "💪 You've got this - do it!", "❌ Maybe tackle something else first",
+            "⏳ Wait for a better moment", "🤔 Consider your energy level first", "📱 Check your priorities again",
+            "🔄 Come back to this later", "⚖️ Weigh your options more", "🎲 Try asking again in 5 minutes",
+            "🌟 Your instincts are right", "📋 Break it into smaller steps first", "☕ Take a break, then decide"
+        ];
+
+        const focusMantras = [
+            "🧘 I am focused and in control of my time", "⚡ I choose progress over perfection",
+            "🎯 This task deserves my full attention", "💪 I have the skills to complete this well",
+            "🌊 I flow with my work, not against it", "🔥 I am energized and ready to create",
+            "🎪 I make work enjoyable and rewarding", "🚀 I am building momentum with every action",
+            "💎 I value my time and use it wisely", "🌟 I trust my ability to make good decisions"
+        ];
+
+        // ========================================
+        // FILE SAVE FUNCTIONS
+        // ========================================
+        function downloadFile(filename, content) {
+            const element = document.createElement('a');
+            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
+            element.setAttribute('download', filename);
+            element.style.display = 'none';
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        }
+
+        function saveData() {
+            const content = `TIME MANAGEMENT TOOLKIT - CAPACITY TRACKER
+Generated: ${new Date().toLocaleDateString()}
+
+CURRENT CAPACITY: ${currentCapacity}%
+
+TASKS ON YOUR PLATE:
+${tasks.map((task, index) => `${index + 1}. ${task.name} (${task.effort}% capacity)`).join('\n')}
+
+TOTAL TASKS: ${tasks.length}
+
+CAPACITY STATUS:
+${currentCapacity <= 70 ? '✅ GREEN ZONE - Room for more commitments' : 
+  currentCapacity <= 90 ? '⚠️ YELLOW ZONE - Getting full, be selective' : 
+  '🚨 RED ZONE - Time to say no or delegate!'}
+
+RECOMMENDATIONS:
+- Keep tracking your capacity before taking on new commitments
+- Use the "Saying No" phrases when you're in yellow/red zones
+- Review and adjust your task estimates regularly
+- Remember: saying no to less important things means saying yes to what matters most
+
+Generated by Time Management Toolkit`;
+
+            downloadFile('time-management-capacity.txt', content);
+        }
+
+        function saveTimeBlockingData() {
+            const answers = Object.values(blockingAnswers);
+            const score = answers.reduce((sum, val) => sum + val, 0);
+            
+            const content = `TIME BLOCKING ASSESSMENT RESULTS
+Generated: ${new Date().toLocaleDateString()}
+
+ASSESSMENT SCORE: ${score}/10
+
+DETAILED RESPONSES:
+1. Block Specificity: ${getAnswerText(1, blockingAnswers[1] || 0)}
+2. Buffer Time: ${getAnswerText(2, blockingAnswers[2] || 0)}
+3. Task Batching: ${getAnswerText(3, blockingAnswers[3] || 0)}
+4. Time Protection: ${getAnswerText(4, blockingAnswers[4] || 0)}
+5. Time Estimates: ${getAnswerText(5, blockingAnswers[5] || 0)}
+
+RECOMMENDATIONS:
+${score <= 3 ? 
+  '🚨 NEEDS WORK:\n- Make blocks more specific\n- Add 15-minute buffers\n- Batch similar tasks\n- Treat blocks as unmovable appointments' :
+  score <= 6 ?
+  '⚠️ GOOD FOUNDATION:\n- Be more consistent with successful habits\n- Fine-tune time estimates\n- Protect focus blocks more aggressively' :
+  '🎯 EXCELLENT SYSTEM:\n- Experiment with theme days\n- Track productivity metrics\n- Consider automation with Apple Shortcuts'}
+
+Generated by Time Management Toolkit`;
+
+            downloadFile('time-blocking-assessment.txt', content);
+        }
+
+        function saveDecisionData() {
+            const content = `DECISION MAGIC RESULTS
+Generated: ${new Date().toLocaleDateString()}
+
+MAGIC 8-BALL:
+Question: "${document.getElementById('magicQuestion').value}"
+Answer: "${document.getElementById('ballAnswer').textContent}"
+
+ROULETTE TASKS:
+${rouletteTasks.length > 0 ? rouletteTasks.map((task, index) => `${index + 1}. ${task}`).join('\n') : 'No tasks added'}
+
+QUICK DECISION RESULTS:
+- Coin Flip: ${document.getElementById('coinResult').textContent}
+- Dice Roll: ${document.getElementById('diceResult').textContent}
+- Focus Mantra: ${document.getElementById('mantraResult').textContent}
+
+Generated by Time Management Toolkit`;
+
+            downloadFile('decision-magic-results.txt', content);
+        }
+
+        function saveEmergencyData() {
+            const stressTexts = ['', 'Fine', 'Stressed', 'Overwhelmed', 'Burning Out'];
+            const content = `EMERGENCY BRAKE PROTOCOL
+Generated: ${new Date().toLocaleDateString()}
+
+STRESS LEVEL: ${stressLevel > 0 ? stressTexts[stressLevel] : 'Not assessed'}
+
+IMMEDIATE ACTION CHECKLIST:
+□ Cancel or postpone 1-2 non-essential commitments
+□ Send one email declining a future request
+□ Ask for help on biggest current stressor
+□ Take a 15-minute break to breathe and reset
+
+EMERGENCY SCRIPTS:
+"I'm at capacity and want to ensure quality work. Can we discuss priorities?"
+"I need to step back from [commitment] to manage my workload effectively."
+
+Generated by Time Management Toolkit`;
+
+            downloadFile('emergency-action-plan.txt', content);
+        }
+
+        function getAnswerText(questionNum, score) {
+            const answers = {
+                1: ['Generic blocks', 'Mix of specific/generic', 'Specific blocks'],
+                2: ['No buffer time', 'Some buffer time', 'Proper buffer time'],
+                3: ['Tasks scattered', 'Sometimes batch', 'Dedicated batching'],
+                4: ['Often interrupted', 'Sometimes protected', 'Well protected'],
+                5: ['Consistently over', 'Sometimes accurate', 'Usually accurate']
+            };
+            return answers[questionNum][score] || 'Not answered';
+        }
+
+        // ========================================
+        // CAPACITY FUNCTIONS
+        // ========================================
+        function addTask() {
+            const taskInput = document.getElementById('taskInput');
+            const effortLevel = document.getElementById('effortLevel');
+            
+            if (taskInput.value.trim() === '') return;
+            
+            const task = {
+                name: taskInput.value,
+                effort: parseInt(effortLevel.value),
+                id: Date.now()
+            };
+            
+            tasks.push(task);
+            currentCapacity += task.effort;
+            
+            updateCapacityDisplay();
+            renderTasks();
+            
+            taskInput.value = '';
+        }
+
+        function removeTask(taskId) {
+            const task = tasks.find(t => t.id === taskId);
+            if (task) {
+                currentCapacity -= task.effort;
+                tasks = tasks.filter(t => t.id !== taskId);
+                updateCapacityDisplay();
+                renderTasks();
+            }
+        }
+
+        function updateCapacityDisplay() {
+            const capacityFill = document.getElementById('capacityFill');
+            const capacityStatus = document.getElementById('capacityStatus');
+            
+            const percentage = Math.min(currentCapacity, 100);
+            capacityFill.style.width = percentage + '%';
+            capacityFill.textContent = currentCapacity + '%';
+            
+            if (currentCapacity <= 70) {
+                capacityStatus.innerHTML = '<i class="fas fa-check-circle text-success"></i> You\'re in the green zone! 💚';
+                capacityStatus.className = 'mb-0 text-success';
+            } else if (currentCapacity <= 90) {
+                capacityStatus.innerHTML = '<i class="fas fa-exclamation-triangle text-warning"></i> Yellow zone - getting full! 🟡';
+                capacityStatus.className = 'mb-0 text-warning';
+            } else {
+                capacityStatus.innerHTML = '<i class="fas fa-exclamation-triangle text-danger"></i> Red zone - time to say no! 🔴';
+                capacityStatus.className = 'mb-0 text-danger';
+            }
+        }
+
+        function renderTasks() {
+            const taskList = document.getElementById('taskList');
+            
+            if (tasks.length === 0) {
+                taskList.innerHTML = '<div class="text-center text-muted"><i class="fas fa-inbox"></i><br>No tasks added yet. Add your first task above!</div>';
+                return;
+            }
+            
+            taskList.innerHTML = tasks.map(task => {
+                const effortClass = task.effort >= 40 ? 'high' : task.effort >= 25 ? 'medium' : 'low';
+                return `
+                    <div class="task-item ${effortClass} d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="mb-1">${task.name}</h5>
+                            <span class="badge bg-secondary">${task.effort}% capacity</span>
+                        </div>
+                        <button class="btn btn-outline-danger btn-sm" onclick="removeTask(${task.id})">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ========================================
+        // DECISION TREE FUNCTIONS
+        // ========================================
+        function showResult(resultId) {
+            // Hide all results first
+            ['priority-yes', 'priority-no', 'priority-maybe', 'capacity-yes', 'capacity-no'].forEach(id => {
+                const element = document.getElementById(id);
+                if (element) element.style.display = 'none';
+            });
+            
+            // Show the requested result
+            const element = document.getElementById(resultId);
+            if (element) element.style.display = 'block';
+        }
+
+        // ========================================
+        // TIME BLOCKING FUNCTIONS
+        // ========================================
+        function scorePoint(questionNum, score) {
+            blockingAnswers[questionNum] = score;
+            
+            // Update visual feedback
+            const questionDiv = event.target.closest('.mb-4');
+            const options = questionDiv.querySelectorAll('.decision-option');
+            options.forEach(option => option.classList.remove('selected'));
+            event.target.classList.add('selected');
+            
+            // Calculate and show score
+            updateBlockingScore();
+        }
+
+        function updateBlockingScore() {
+            const answers = Object.values(blockingAnswers);
+            const score = answers.reduce((sum, val) => sum + val, 0);
+            const scoreDiv = document.getElementById('blocking-score');
+            const scoreTitle = document.getElementById('score-title');
+            const scoreContent = document.getElementById('score-content');
+            
+            if (answers.length > 0) {
+                scoreDiv.style.display = 'block';
+                scoreTitle.textContent = `Your Time Blocking Score: ${score}/10`;
+                
+                let feedback = '';
+                let alertClass = '';
+                
+                if (score <= 3) {
+                    alertClass = 'alert-danger';
+                    feedback = `
+                        <strong>🚨 NEEDS WORK:</strong>
+                        <ul>
+                            <li>Make blocks more specific</li>
+                            <li>Add 15-minute buffers</li>
+                            <li>Batch similar tasks</li>
+                            <li>Treat blocks as unmovable appointments</li>
+                        </ul>
+                    `;
+                } else if (score <= 6) {
+                    alertClass = 'alert-warning';
+                    feedback = `
+                        <strong>⚠️ GOOD FOUNDATION:</strong>
+                        <ul>
+                            <li>Be more consistent with successful habits</li>
+                            <li>Fine-tune time estimates</li>
+                            <li>Protect focus blocks more aggressively</li>
+                        </ul>
+                    `;
+                } else {
+                    alertClass = 'alert-success';
+                    feedback = `
+                        <strong>🎯 EXCELLENT SYSTEM:</strong>
+                        <ul>
+                            <li>Experiment with theme days</li>
+                            <li>Track productivity metrics</li>
+                            <li>Consider automation with Apple Shortcuts</li>
+                        </ul>
+                    `;
+                }
+                
+                scoreDiv.className = `alert ${alertClass}`;
+                scoreContent.innerHTML = feedback;
+            }
+        }
+
+        // ========================================
+        // MAGIC 8-BALL FUNCTIONS
+        // ========================================
+        function shakeBall() {
+            const questionInput = document.getElementById('magicQuestion');
+            const ballAnswer = document.getElementById('ballAnswer');
+            const magicBall = document.getElementById('magicBall');
+            
+            if (questionInput.value.trim() === '') {
+                alert('Please enter a question first!');
+                return;
+            }
+            
+            // Add shake animation
+            magicBall.classList.add('shake');
+            
+            // Show random response after animation
+            setTimeout(() => {
+                const randomResponse = magicResponses[Math.floor(Math.random() * magicResponses.length)];
+                ballAnswer.textContent = randomResponse;
+                magicBall.classList.remove('shake');
+            }, 600);
+        }
+
+        // ========================================
+        // ROULETTE FUNCTIONS
+        // ========================================
+        function addRouletteTask() {
+            const taskInput = document.getElementById('rouletteTask');
+            
+            if (taskInput.value.trim() === '') return;
+            
+            rouletteTasks.push(taskInput.value.trim());
+            taskInput.value = '';
+            
+            updateRouletteDisplay();
+        }
+
+        function updateRouletteDisplay() {
+            const tasksDiv = document.getElementById('rouletteTasks');
+            const wheelDiv = document.getElementById('rouletteWheel');
+            const spinButton = document.getElementById('spinButton');
+            
+            if (rouletteTasks.length < 2) {
+                tasksDiv.innerHTML = '<div class="alert alert-warning">Add 2-5 tasks to spin!</div>';
+                wheelDiv.style.display = 'none';
+                spinButton.style.display = 'none';
+            } else {
+                // Show task list
+                tasksDiv.innerHTML = rouletteTasks.map((task, index) => 
+                    `<span class="badge bg-primary me-2 mb-2">${task}</span>`
+                ).join('');
+                
+                // Show wheel and button
+                wheelDiv.style.display = 'block';
+                spinButton.style.display = 'inline-block';
+                
+                // Create wheel sections
+                createWheelSections();
+            }
+        }
+
+        function createWheelSections() {
+            const wheelSections = document.getElementById('wheelSections');
+            const sectionAngle = 360 / rouletteTasks.length;
+            
+            wheelSections.innerHTML = rouletteTasks.map((task, index) => {
+                const rotation = index * sectionAngle;
+                const hue = (index * 360) / rouletteTasks.length;
+                
+                return `
+                    <div class="wheel-section" style="
+                        transform: rotate(${rotation}deg);
+                        background: hsl(${hue}, 70%, 60%);
+                    ">
+                        ${task}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function spinWheel() {
+            const wheelSections = document.getElementById('wheelSections');
+            const resultDiv = document.getElementById('rouletteResult');
+            
+            // Generate random spin
+            const spins = Math.floor(Math.random() * 5) + 5; // 5-10 full rotations
+            const finalAngle = Math.random() * 360;
+            const totalRotation = spins * 360 + finalAngle;
+            
+            wheelSections.style.transform = `rotate(${totalRotation}deg)`;
+            
+            // Calculate winner
+            setTimeout(() => {
+                const normalizedAngle = (360 - (finalAngle % 360)) % 360;
+                const sectionAngle = 360 / rouletteTasks.length;
+                const winnerIndex = Math.floor(normalizedAngle / sectionAngle);
+                
+                resultDiv.innerHTML = `🎯 <strong>Winner:</strong> ${rouletteTasks[winnerIndex]}`;
+                resultDiv.style.display = 'block';
+            }, 3000);
+        }
+
+        // ========================================
+        // QUICK DECISION TOOLS
+        // ========================================
+        function coinFlip() {
+            const result = Math.random() < 0.5 ? '🪙 Heads - YES!' : '🪙 Tails - NO!';
+            document.getElementById('coinResult').textContent = result;
+        }
+
+        function rollDice() {
+            const roll = Math.floor(Math.random() * 6) + 1;
+            document.getElementById('diceResult').textContent = `🎲 Rolled: ${roll}`;
+        }
+
+        function getMantra() {
+            const randomMantra = focusMantras[Math.floor(Math.random() * focusMantras.length)];
+            document.getElementById('mantraResult').textContent = randomMantra;
+        }
+
+        // ========================================
+        // EMERGENCY FUNCTIONS
+        // ========================================
+        function setStress(level) {
+            stressLevel = level;
+            
+            // Update button states
+            document.querySelectorAll('#emergency .btn-outline-light').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Show appropriate response
+            const responseDiv = document.getElementById('stress-response');
+            const stressTexts = ['', 'Fine', 'Stressed', 'Overwhelmed', 'Burning Out'];
+            
+            let alertClass = level >= 3 ? 'alert-danger' : 'alert-warning';
+            
+            responseDiv.innerHTML = `
+                <div class="${alertClass}">
+                    <h5>Stress Level: ${stressTexts[level]}</h5>
+                    <p><strong>Immediate Action Plan:</strong></p>
+                    <ul>
+                        <li>□ Cancel or postpone 1-2 non-essential commitments</li>
+                        <li>□ Send one email declining a future request</li>
+                        <li>□ Ask for help on biggest current stressor</li>
+                        <li>□ Take a 15-minute break to breathe and reset</li>
+                    </ul>
+                    
+                    <h6>Emergency Scripts:</h6>
+                    <p style="background: rgba(0,0,0,0.1); padding: 8px; border-radius: 4px; font-style: italic;">
+                        "I'm at capacity and want to ensure quality work. Can we discuss priorities?"
+                    </p>
+                    <p style="background: rgba(0,0,0,0.1); padding: 8px; border-radius: 4px; font-style: italic;">
+                        "I need to step back from [commitment] to manage my workload effectively."
+                    </p>
+                </div>
+            `;
+        }
+
+        // ========================================
+        // COPY TO CLIPBOARD FUNCTION
+        // ========================================
+        function copyPhrase(element) {
+            const text = element.querySelector('p').textContent;
+            
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(text).then(() => {
+                    // Show feedback
+                    const originalText = element.innerHTML;
+                    element.innerHTML = '<h5><i class="fas fa-check text-success"></i> Copied!</h5><p>' + text + '</p>';
+                    
+                    setTimeout(() => {
+                        element.innerHTML = originalText;
+                    }, 2000);
+                });
+            } else {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                
+                alert('Phrase copied to clipboard!');
+            }
+        }
+
+        // ========================================
+        // INITIALIZATION
+        // ========================================
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize display
+            updateCapacityDisplay();
+            renderTasks();
+            
+            // Add enter key support for inputs
+            document.getElementById('taskInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') addTask();
+            });
+            
+            document.getElementById('rouletteTask').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') addRouletteTask();
+            });
+            
+            console.log('🎯 Time Management Toolkit loaded successfully!');
+        });
+    </script>
+</body>
+</html>
